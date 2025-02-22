@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using TaskManager.Data;
 using TaskManager.Models;
 
@@ -11,28 +12,62 @@ namespace TaskManager.Repository
         {
             _context = context;
         }
-        public async Task<TaskItem> AddTaskAsync(TaskItem task)
+        public async Task<TaskItem> AddTaskItemAsync(TaskItem taskItem)
         {
-            return null;
+            if (taskItem == null) 
+            { 
+                throw new ArgumentNullException(nameof(taskItem));
+            }
+
+            await _context.TaskItems.AddAsync(taskItem);
+            await _context.SaveChangesAsync();
+
+            return taskItem;
         }
 
-        public async Task DeleteTaskAsync(int id)
+        public async Task DeleteTaskItemAsync(int id)
         {
+            var taskItem = await _context.TaskItems.FindAsync(id);
+            if (taskItem != null)
+            {
+                _context.TaskItems.Remove(taskItem);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new InvalidOperationException("Task not found");
+            }
         }
 
-        public Task<IEnumerable<TaskItem>> GetAllTasksAsync()
+        public async Task<IEnumerable<TaskItem>> GetAllTaskItemsAsync()
         {
-            return null;
+            return await _context.TaskItems.ToListAsync();
         }
 
-        public async Task<TaskItem> GetTaskByIdAsync(int id)
+        public async Task<TaskItem> GetTaskItemByIdAsync(int id)
         {
-            return null;
+            var taskItem = await _context.TaskItems.FindAsync(id);
+
+            if (taskItem == null)
+            {
+                throw new InvalidOperationException("Task not found");
+            }
+
+            return taskItem;
         }
 
-        public Task UpdateTaskAsync(TaskItem task)
+        public Task<TaskItem> UpdateTaskItemAsync(TaskItem task)
         {
-            return null;
+            var checkTaskItem = _context.TaskItems.Find(task.Id);
+
+            if (checkTaskItem == null)
+            {
+                throw new InvalidOperationException("Task not found");
+            }
+
+            var taskItem = _context.TaskItems.Attach(task);
+
+            return Task.FromResult(taskItem.Entity);
         }
     }
 }

@@ -3,10 +3,10 @@
     using TaskManager.Models;
     public interface ITaskItemRepository
     {
-        Task<TaskItem> GetTaskByIdAsync(int id);
-        Task<IEnumerable<TaskItem>> GetAllTasksAsync();
-        Task<TaskItem> AddTaskAsync(TaskItem taskItem);
-        Task UpdateTaskAsync(TaskItem taskItem);
-        Task DeleteTaskAsync(int id);
+        Task<TaskItem> GetTaskItemByIdAsync(int id);
+        Task<IEnumerable<TaskItem>> GetAllTaskItemsAsync();
+        Task<TaskItem> AddTaskItemAsync(TaskItem taskItem);
+        Task<TaskItem> UpdateTaskItemAsync(TaskItem taskItem);
+        Task DeleteTaskItemAsync(int id);
     }
 }
