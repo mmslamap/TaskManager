@@ -56,7 +56,7 @@ namespace TaskManager.Repository
             return taskItem;
         }
 
-        public Task<TaskItem> UpdateTaskItemAsync(TaskItem task)
+        public async Task<TaskItem> UpdateTaskItemAsync(TaskItem task)
         {
             var checkTaskItem = _context.TaskItems.Find(task.Id);
 
@@ -67,7 +67,7 @@ namespace TaskManager.Repository
 
             var taskItem = _context.TaskItems.Attach(task);
 
-            return Task.FromResult(taskItem.Entity);
+            return await Task.FromResult(taskItem.Entity);
         }
     }
 }

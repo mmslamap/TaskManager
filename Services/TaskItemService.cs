@@ -34,14 +34,28 @@ namespace TaskManager.Services
             return await _taskItemRepository.GetAllTaskItemsAsync();
         }
 
-        public async Task<TaskItem> GetTaskItemByIdAsync(int id)
+        public async Task<TaskItem?> GetTaskItemByIdAsync(int id)
         {
-            return await _taskItemRepository.GetTaskItemByIdAsync(id);
+            try
+            {
+                return await _taskItemRepository.GetTaskItemByIdAsync(id);
+            }
+            catch (InvalidOperationException e)
+            {
+                throw new InvalidOperationException(e.Message, e);
+            }
         }
 
-        public async Task<TaskItem> UpdateTaskItemAsync(TaskItem task)
+        public async Task<TaskItem?> UpdateTaskItemAsync(TaskItem task)
         {
-            return await _taskItemRepository.UpdateTaskItemAsync(task);
+            try
+            {
+                return await _taskItemRepository.UpdateTaskItemAsync(task);
+            }
+            catch (InvalidOperationException e)
+            {
+                throw new InvalidOperationException(e.Message, e);
+            }
         }
     }
 }
